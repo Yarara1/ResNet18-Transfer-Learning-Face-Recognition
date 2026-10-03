@@ -10,7 +10,6 @@ Five setups are compared:
 - Model C: fine-tune all convolutional layers
 - Model D: freeze the backbone and train a new head with two hidden fully connected layers
 
----
 
 ## Dataset
 
@@ -18,7 +17,7 @@ The dataset has 100 subjects with 50 images each, so 5,000 images in total. For 
 
 The architecture analysis below uses the original 64 × 64 × 3 images. For training, the images are resized to 224 × 224 and converted to RGB so they match the input of the pretrained ResNet-18 in MATLAB.
 
----
+
 
 ## ResNet-18
 
@@ -34,7 +33,7 @@ y = F(x) + x
 
 These skip connections make it easier for gradients to flow through the network. The original ImageNet classifier is swapped for a new one with 100 outputs, one per face identity.
 
----
+
 
 ## Architecture analysis (64 × 64 input)
 
@@ -44,7 +43,7 @@ Example layers:
 
 <img width="863" height="553" alt="image" src="https://github.com/user-attachments/assets/42928dcf-b250-46b5-9af5-4cbca6d27ba0" />
 
----
+
 
 # Transfer learning models
 
@@ -58,13 +57,13 @@ The pretrained ResNet-18 is used as a fixed feature extractor. All convolutional
 
 ImageNet features do carry over to faces even when the backbone isn't touched. But training accuracy is much higher than testing accuracy, so the fixed features aren't specific enough to tell 100 faces apart.
 
----
+
 
 ## Model A: fine-tune Conv5_x
 
 Model A trains the last group of residual blocks (`Conv5_x`) along with the new classifier. Everything before it stays frozen. No data augmentation.
 
-```text
+text
 Frozen:
 Conv1
 Conv2_x
@@ -80,7 +79,7 @@ Classifier
 
 Testing accuracy jumps well above the baseline. The deepest layers hold the most high-level features, so letting them adapt gives the network a representation that fits faces better.
 
----
+
 
 ## Model B: fine-tune Conv4_x and Conv5_x
 
@@ -109,7 +108,7 @@ This is also the first model that uses data augmentation during training:
 
 Model B has the best testing accuracy of the five. Tuning the last two stages lets the higher-level features adapt to faces, while the early layers keep the general features they learned on ImageNet.
 
----
+
 
 ## Model C: fine-tune all convolutional layers
 
@@ -121,7 +120,7 @@ Training accuracy is close to perfect, but testing accuracy ends up a bit below 
 
 The early layers learn general things like edges and textures. Updating them with only 4,000 training images can wash out some of what the pretrained weights already knew.
 
----
+
 
 ## Model D: frozen backbone with two hidden FC layers
 
@@ -133,19 +132,18 @@ Model D keeps the whole backbone frozen and replaces the original classifier wit
 
 This one didn't work. Training accuracy is only 1.47%, which is close to chance for 100 classes. The backbone is frozen, so the features can't adapt to faces, and a bigger head doesn't make up for that.
 
----
+
 
 # Results summary
 
 <img width="802" height="469" alt="image" src="https://github.com/user-attachments/assets/66c08c29-8fcf-4a15-8da7-30f17a2c7766" />
 
----
 
 # Training curves
 
 After every epoch, training and testing accuracy and cross-entropy loss were recorded. For each model there are four curves: training accuracy, testing accuracy, training loss and testing loss. These can be saved in the matching folder under `results/`.
 
----
+
 
 # What the results show
 
@@ -157,7 +155,7 @@ How much of the network you fine-tune makes a big difference.
 - **Model C (88.90%):** Fine-tuning everything is slightly worse than Model B even though training accuracy is almost 100%, which points to overfitting.
 - **Model D (1.70%):** Making the classifier bigger while the backbone stays frozen doesn't help. Adapting the feature extractor mattered more than adding FC layers.
 
----
+
 
 # Size and similarity
 
@@ -167,7 +165,6 @@ The results line up with the usual size-similarity rule of thumb for transfer le
 
 More trainable layers doesn't automatically mean better generalization. How deep to fine-tune depends on how big and how similar the target dataset is.
 
----
 
 # Requirements
 
