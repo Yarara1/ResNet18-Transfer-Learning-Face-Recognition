@@ -63,7 +63,7 @@ ImageNet features do carry over to faces even when the backbone isn't touched. B
 
 Model A trains the last group of residual blocks (`Conv5_x`) along with the new classifier. Everything before it stays frozen. No data augmentation.
 
-text
+```text
 Frozen:
 Conv1
 Conv2_x
