@@ -5,8 +5,8 @@ This project looks at how much of an ImageNet-pretrained ResNet-18 you need to f
 Five setups are compared:
 
 - Baseline: retrain only the final classifier
-- Model A: fine-tune ## Conv5_x
-- Model B: fine-tune ## Conv4_x and `Conv5_x`
+- Model A: fine-tune Conv5_x
+- Model B: fine-tune Conv4_x and Conv5_x
 - Model C: fine-tune all convolutional layers
 - Model D: freeze the backbone and train a new head with two hidden fully connected layers
 
@@ -61,7 +61,7 @@ ImageNet features do carry over to faces even when the backbone isn't touched. B
 
 ## Model A: fine-tune Conv5_x
 
-Model A trains the last group of residual blocks (`Conv5_x`) along with the new classifier. Everything before it stays frozen. No data augmentation.
+Model A trains the last group of residual blocks (Conv5_x) along with the new classifier. Everything before it stays frozen. No data augmentation.
 
 ```text
 Frozen:
@@ -83,7 +83,7 @@ Testing accuracy jumps well above the baseline. The deepest layers hold the most
 
 ## Model B: fine-tune Conv4_x and Conv5_x
 
-Model B trains `Conv4_x` and `Conv5_x` along with the classifier. The earlier blocks stay frozen.
+Model B trains Conv4_x and Conv5_x along with the classifier. The earlier blocks stay frozen.
 
 ```text
 Frozen:
